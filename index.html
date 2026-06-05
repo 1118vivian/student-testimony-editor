@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>學員蒙恩見證稿編輯器</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script defer src="./vendor/docx.umd.js"></script>
+    <script defer src="./vendor/html2pdf.bundle.min.js"></script>
+    <script defer src="./app.js"></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="editor-pane" aria-label="學員蒙恩見證稿欄位">
+        <div class="pane-heading">
+          <div>
+            <p class="eyebrow">臺灣福音工作全時間訓練壯年成全班</p>
+            <h1>學員蒙恩見證稿編輯器</h1>
+          </div>
+          <button class="ghost-button" id="clearForm" type="button">清空</button>
+        </div>
+
+        <form id="testimonyForm" class="form-grid">
+          <label>
+            <span>起始組別</span>
+            <input id="groupStart" name="groupStart" type="text" inputmode="numeric" placeholder="例如：1" />
+          </label>
+
+          <label>
+            <span>結束組別</span>
+            <input id="groupEnd" name="groupEnd" type="text" inputmode="numeric" placeholder="例如：2" />
+          </label>
+
+          <label>
+            <span>姓名</span>
+            <input id="name" name="name" type="text" placeholder="請輸入姓名" />
+          </label>
+
+          <label>
+            <span>第幾週</span>
+            <input id="week" name="week" type="text" inputmode="numeric" placeholder="例如：12" />
+          </label>
+
+          <label>
+            <span>開始日期</span>
+            <input id="startDate" name="startDate" type="date" />
+          </label>
+
+          <label>
+            <span>結束日期</span>
+            <input id="endDate" name="endDate" type="date" />
+          </label>
+
+          <label class="span-full">
+            <span>主題</span>
+            <input id="topic" name="topic" type="text" value="將訓練所學應用於生活與事奉中" />
+          </label>
+
+          <label class="span-full">
+            <span>一、在訓練生活中</span>
+            <textarea id="trainingLife" name="trainingLife" rows="10" placeholder="請輸入對訓練課程的心得、啟示光照，以及在操練或專項服事配搭中學到的生命功課。"></textarea>
+          </label>
+
+          <label class="span-full">
+            <span>二、在當地召會生活中</span>
+            <textarea id="churchLife" name="churchLife" rows="10" placeholder="請輸入如何應用於個人、家庭生活，以及召會開展配搭服事中的經歷。"></textarea>
+          </label>
+        </form>
+
+        <div class="actions" aria-label="產生檔案">
+          <button id="downloadDocx" type="button">產生 DOCX</button>
+          <button id="downloadPdf" type="button">產生 PDF</button>
+        </div>
+      </section>
+
+      <section class="preview-pane" aria-label="預覽">
+        <div class="preview-toolbar">
+          <h2>預覽</h2>
+          <span id="fileNamePreview">學員蒙恩見證稿.docx</span>
+        </div>
+
+        <article id="documentPreview" class="document-page">
+          <header class="doc-header">
+            <p>臺灣福音工作全時間訓練壯年成全班</p>
+            <h2>學員蒙恩見證稿</h2>
+            <p class="doc-note">(若本週改寫其他作業，則不必填寫本表)</p>
+          </header>
+
+          <div class="meta-line">
+            <span>第 <strong data-preview="groupStart"></strong> - <strong data-preview="groupEnd"></strong> 組</span>
+            <span>姓名 <strong data-preview="name"></strong></span>
+            <span>第 <strong data-preview="week"></strong> 週</span>
+            <span><strong data-preview="startDateText"></strong> 至 <strong data-preview="endDateText"></strong></span>
+          </div>
+
+          <section class="topic-line">
+            <span>主題：</span>
+            <strong data-preview="topic"></strong>
+          </section>
+
+          <section class="doc-section">
+            <h3>一、在訓練生活中：</h3>
+            <ol>
+              <li>對於訓練課程的心得及深刻得著的啟示與光照(略舉課程要點)</li>
+              <li>在訓練生活中的操練或專項服事的配搭上，所學到的生命功課(舉例述說)</li>
+            </ol>
+            <div class="section-body multiline tall" data-preview="trainingLife"></div>
+          </section>
+
+          <section class="doc-section">
+            <h3>二、在當地召會生活中：</h3>
+            <ol>
+              <li>如何將訓練所學的功課應用於個人及家庭生活中(列舉實例)</li>
+              <li>應用於召會開展之配搭服事(包括對人與事的方面)中的經歷(列舉實例)</li>
+            </ol>
+            <div class="section-body multiline tall" data-preview="churchLife"></div>
+          </section>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
