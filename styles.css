@@ -61,6 +61,11 @@ textarea {
   margin-bottom: 16px;
 }
 
+.pane-heading .ghost-button {
+  flex: 0 0 auto;
+  min-width: 56px;
+}
+
 .eyebrow {
   margin: 0 0 4px;
   color: var(--accent-strong);
@@ -318,6 +323,15 @@ button:hover {
 
   .document-page {
     padding: 28px 18px;
+  }
+
+  .pane-heading {
+    align-items: flex-start;
+  }
+
+  .pane-heading h1 {
+    font-size: 20px;
+    white-space: nowrap;
   }
 
   .topic-line {
