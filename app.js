@@ -1,7 +1,6 @@
 (function () {
   const fields = [
-    "groupStart",
-    "groupEnd",
+    "group",
     "name",
     "week",
     "startDate",

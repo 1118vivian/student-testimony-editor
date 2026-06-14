@@ -4,12 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>學員蒙恩見證稿編輯器</title>
-    <link rel="stylesheet" href="./styles.css?v=20260614-1" />
+    <link rel="stylesheet" href="./styles.css?v=20260614-2" />
     <script defer src="./vendor/docx.umd.js"></script>
     <script defer src="./vendor/html2pdf.bundle.min.js"></script>
     <script defer src="./vendor/html2canvas.min.js"></script>
     <script defer src="./vendor/jspdf.umd.min.js"></script>
-    <script defer src="./app.js?v=20260614-1"></script>
+    <script defer src="./app.js?v=20260614-2"></script>
   </head>
   <body>
     <main class="app-shell">
@@ -24,13 +24,8 @@
 
         <form id="testimonyForm" class="form-grid">
           <label>
-            <span>起始組別</span>
-            <input id="groupStart" name="groupStart" type="text" inputmode="numeric" placeholder="例如：1" />
-          </label>
-
-          <label>
-            <span>結束組別</span>
-            <input id="groupEnd" name="groupEnd" type="text" inputmode="numeric" placeholder="例如：2" />
+            <span>第幾組</span>
+            <input id="group" name="group" type="text" placeholder="例如：03-02" />
           </label>
 
           <label>
@@ -90,7 +85,7 @@
           </header>
 
           <div class="meta-line">
-            <span>第 <strong data-preview="groupStart"></strong> - <strong data-preview="groupEnd"></strong> 組</span>
+            <span>第 <strong data-preview="group"></strong> 組</span>
             <span>姓名 <strong data-preview="name"></strong></span>
             <span>第 <strong data-preview="week"></strong> 週</span>
             <span><strong data-preview="startDateText"></strong> 至 <strong data-preview="endDateText"></strong></span>
