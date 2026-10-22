@@ -4,12 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>學員蒙恩見證稿編輯器</title>
-    <link rel="stylesheet" href="./styles.css?v=20260614-3" />
+    <link rel="stylesheet" href="./styles.css?v=20261022-4" />
     <script defer src="./vendor/docx.umd.js"></script>
     <script defer src="./vendor/html2pdf.bundle.min.js"></script>
     <script defer src="./vendor/html2canvas.min.js"></script>
     <script defer src="./vendor/jspdf.umd.min.js"></script>
-    <script defer src="./app.js?v=20260614-3"></script>
+    <script defer src="./app.js?v=20261022-4"></script>
   </head>
   <body>
     <main class="app-shell">
@@ -64,6 +64,7 @@
           </label>
         </form>
 
+        <p class="help-text">Word 可直接編輯文字與表格，長文會自動換頁；PDF 保留固定 A4 版面。</p>
         <div class="actions" aria-label="產生檔案">
           <button id="downloadDocx" type="button">產生 DOCX</button>
           <button id="downloadPdf" type="button">產生 PDF</button>

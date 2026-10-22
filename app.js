@@ -13,8 +13,6 @@
   const form = document.getElementById("testimonyForm");
   const fileNamePreview = document.getElementById("fileNamePreview");
   const preview = document.getElementById("documentPreview");
-  const A4_WIDTH_DXA = 11906;
-  const A4_HEIGHT_DXA = 16838;
 
   const data = () =>
     Object.fromEntries(fields.map((field) => [field, document.getElementById(field).value.trim()]));
@@ -68,43 +66,50 @@
     }
   };
 
-  const createDocxBlob = async () => {
-    if (!window.docx) throw new Error("DOCX 套件尚未載入，請重新整理頁面後再試。");
-    if (!window.html2canvas) throw new Error("手機版 Word 版面套件尚未載入，請重新整理頁面後再試。");
-    const docx = window.docx;
-    const canvas = await captureA4Preview(1);
-
-    const doc = new docx.Document({
-      sections: [
-        {
-          properties: {
-            page: {
-              size: { width: A4_WIDTH_DXA, height: A4_HEIGHT_DXA },
-              margin: { top: 0, right: 0, bottom: 0, left: 0 },
-            },
-          },
-          children: [
-            new docx.Paragraph({
-              spacing: { before: 0, after: 0 },
-              children: [
-                new docx.ImageRun({
-                  data: canvas.toDataURL("image/png"),
-                  transformation: { width: 794, height: 1123 },
-                  altText: {
-                    title: "學員蒙恩見證稿",
-                    description: "由學員蒙恩見證稿編輯器產生的固定 A4 版面",
-                    name: "學員蒙恩見證稿",
-                  },
-                }),
-              ],
-            }),
-          ],
-        },
-      ],
+  async function createDocxBlob() {
+    if (!window.docx) throw new Error("Word 套件尚未載入，請重新整理後再試。");
+    const d = window.docx;
+    const data = Object.fromEntries(fields.map(key => [key, document.getElementById(key).value.trim()]));
+    const font = { ascii: "Microsoft JhengHei", hAnsi: "Microsoft JhengHei", eastAsia: "Microsoft JhengHei", cs: "Microsoft JhengHei" };
+    const paragraph = (text, options = {}) => new d.Paragraph({
+      alignment: options.alignment || d.AlignmentType.LEFT,
+      spacing: { before: 0, after: options.after ?? 0, line: options.line || 340, lineRule: d.LineRuleType.EXACT },
+      keepNext: false,
+      keepLines: false,
+      children: text.split(/\r?\n/).map((line, index) => new d.TextRun({
+        text: line, break: index ? 1 : undefined, font,
+        size: options.size || 26, bold: options.bold || false, snapToGrid: false,
+      })),
     });
-
-    return docx.Packer.toBlob(doc);
-  };
+    const tableWidth = 10706;
+    const border = { style: d.BorderStyle.SINGLE, size: 6, color: "C9D1D9" };
+    const contentBox = (text, height) => new d.Table({
+      width: { size: tableWidth, type: d.WidthType.DXA }, columnWidths: [tableWidth], layout: d.TableLayoutType.FIXED,
+      margins: { top: 100, bottom: 100, left: 140, right: 140 },
+      borders: { top: border, bottom: border, left: border, right: border },
+      rows: [new d.TableRow({ cantSplit: false, height: { value: height, rule: d.HeightRule.ATLEAST }, children: [new d.TableCell({ width: { size: tableWidth, type: d.WidthType.DXA }, verticalAlign: d.VerticalAlign.TOP, children: (text || "").split(/\r?\n/).map(line => paragraph(line)) })] })],
+    });
+    const doc = new d.Document({ title: "學員蒙恩見證稿",
+      styles: { default: { document: { run: { font, size: 26, color: "000000" }, paragraph: { spacing: { after: 0 } } } } },
+      sections: [{
+        properties: { verticalAlign: d.VerticalAlign.TOP, page: { size: { width: 11906, height: 16838 }, margin: { top: 600, right: 600, bottom: 600, left: 600 } } },
+        children: [
+          paragraph("臺灣福音工作全時間訓練壯年成全班", { bold: true, size: 28, alignment: d.AlignmentType.CENTER, line: 360, after: 40 }),
+          paragraph("學員蒙恩見證稿", { bold: true, size: 38, alignment: d.AlignmentType.CENTER, line: 460, after: 100 }),
+          paragraph("（若本週改寫其他作業，則不必填寫本表）", { size: 20, alignment: d.AlignmentType.CENTER, line: 260, after: 80 }),
+          paragraph(`第 ${data.group} 組    姓名 ${data.name}    第 ${data.week} 週`, { size: 24, line: 300, after: 20 }),
+          paragraph(`${dateText(data.startDate)} 至 ${dateText(data.endDate)}`, { size: 24, line: 300, after: 80 }),
+          paragraph(`主題：${data.topic}`, { bold: true, size: 26, line: 340, after: 100 }),
+          ...Array.from(preview.querySelectorAll(".doc-section"), (section, index) => [
+            paragraph(section.querySelector("h3").textContent, { bold: true, alignment: d.AlignmentType.CENTER, line: 340, after: 40 }),
+            ...Array.from(section.querySelectorAll("li"), (node, i) => paragraph(`${i + 1}. ${node.textContent}`, { size: 22, line: 280 })),
+            contentBox(index === 0 ? data.trainingLife : data.churchLife, 3200),
+          ]).flat(),
+        ],
+      }],
+    });
+    return d.Packer.toBlob(doc);
+  }
 
   const buildDocx = async () => {
     const values = data();

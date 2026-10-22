@@ -338,3 +338,8 @@ button:hover {
     display: block;
   }
 }
+
+/* 欄位標題置中，輸入與文件正文靠左。 */
+label, .doc-section h3 { text-align: center; }
+input, textarea, .section-body, .topic-line strong { text-align: left; }
+.help-text { color: var(--muted); font-size: 13px; line-height: 1.65; }
